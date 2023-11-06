@@ -10,7 +10,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(seconds: 1), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => MyHomePage(title: 'Flutter Demo Home Page'),
       ));

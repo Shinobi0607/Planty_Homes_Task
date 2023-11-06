@@ -19,22 +19,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:plantyhomes/splash.dart';
 
 void main() {
-  runApp( MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      initialRoute: '/', 
+      initialRoute: '/', // Set the initial route to '/'
       routes: {
-        '/': (context) => SplashScreen(), 
+        '/': (context) => SplashScreen(), // SplashScreen as the initial route
         LocationScreen.routeName: (context) => LocationScreen(),
         ProfileScreen.routeName: (context) => ProfileScreen(),
         '/flower': (context) => FlowerPage(),
