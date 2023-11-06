@@ -1,5 +1,9 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
+import 'package:plantyhomes/bottom_nav/configure.dart';
+import 'package:plantyhomes/bottom_nav/discount.dart';
+import 'package:plantyhomes/bottom_nav/settings.dart';
+import 'package:plantyhomes/bottom_nav/shipping.dart';
 import 'package:plantyhomes/category/ceramic_page.dart';
 import 'package:plantyhomes/category/flower_page.dart';
 import 'package:plantyhomes/category/fruits_page.dart';
@@ -8,8 +12,10 @@ import 'package:plantyhomes/category/hanging_page.dart';
 import 'package:plantyhomes/category/relgious.dart';
 import 'package:plantyhomes/category/spices.dart';
 import 'package:plantyhomes/category/vegetables_page.dart';
-import 'package:plantyhomes/location/location.dart';
+import 'package:plantyhomes/appbar/location.dart';
+import 'package:plantyhomes/appbar/profile.dart';
 import 'package:plantyhomes/model/categories_model.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +37,12 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
         LocationScreen.routeName: (context) => LocationScreen(),
+        ProfileScreen.routeName: (context) => ProfileScreen(),
         '/flower': (context) => FlowerPage(),
+        '/settings': (context) => SettingsPage(),
+        '/shipping': (context) => ShippingPage(),
+        '/configure': (context) => ConfigurePage(),
+        '/discount': (context) => DiscountPage(),
       },
     );
   }
@@ -62,23 +73,35 @@ class _MyHomePageState extends State<MyHomePage>
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         height: 60,
         color: Colors.white,
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            BottomNavItem(
-              svgScr: "assets/calendar.svg",
+            const BottomNavItem(
+              svgScr: "assets/home.svg",
             ),
             BottomNavItem(
-              svgScr: "assets/calendar.svg",
+              svgScr: "assets/card.svg",
+              onTap: () {
+                Navigator.pushNamed(context, '/discount');
+              },
             ),
             BottomNavItem(
-              svgScr: "assets/calendar.svg",
+              svgScr: "assets/hand.svg",
+              onTap: () {
+                Navigator.pushNamed(context, '/configure');
+              },
             ),
             BottomNavItem(
-              svgScr: "assets/calendar.svg",
+              svgScr: "assets/shipping.svg",
+              onTap: () {
+                Navigator.pushNamed(context, '/shipping');
+              },
             ),
             BottomNavItem(
-              svgScr: "assets/calendar.svg",
+              svgScr: "assets/settings1.svg",
+              onTap: () {
+                Navigator.pushNamed(context, '/settings');
+              },
             ),
           ],
         ),
@@ -97,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage>
                   selected = index;
                 });
               },
+              onSortSelected: (String) {},
             ),
             const SizedBox(height: 10),
             Column(
@@ -117,9 +141,35 @@ class _MyHomePageState extends State<MyHomePage>
                   height: 140,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                      image: AssetImage('assets/gaurav.png'),
+                  ),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 140,
+                      autoPlay: true,
+                      enlargeCenterPage: true,
                     ),
+                    items: [
+                      'assets/gaurav.png',
+                      'assets/nurs.jpg',
+                      'assets/nursery-1.jpg',
+                      'assets/nurs.jpg',
+                    ].map((item) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(item),
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -136,6 +186,7 @@ class _MyHomePageState extends State<MyHomePage>
                   ),
                 ),
                 gridView(context),
+                const SizedBox(height: 10),
                 Container(
                   margin: const EdgeInsets.only(left: 20),
                   alignment: Alignment.centerLeft,
@@ -149,89 +200,141 @@ class _MyHomePageState extends State<MyHomePage>
                   ),
                 ),
                 Container(
-                  height: 200,
+                  margin: const EdgeInsets.only(left: 20, top: 10),
+                  height: 150,
                   child: ListView.builder(
                     itemCount: 3,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return Container(
-                        width: 180.0,
-                        margin: const EdgeInsets.only(right: 8.0),
+                        width: 150.0,
+                        margin: const EdgeInsets.only(right: 10.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16.0),
                           color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.green.shade500,
-                              offset: const Offset(0.0, 2.0),
-                              blurRadius: 1.0,
-                            ),
-                          ],
+                          border: Border.all(
+                            color: Colors.green.shade300,
+                            width: 1.0,
+                          ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Image.asset(
-                                  'assets/gaurav.png',
-                                  fit: BoxFit.fitWidth,
-                                ),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 150,
+                              height: 80,
+                              child: Image.asset(
+                                'assets/nurse.jpg',
+                                fit: BoxFit.fill,
                               ),
-                              const Column(
-                                children: [
-                                  Text(
+                            ),
+                            Column(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 4, bottom: 2),
+                                  child: Text(
                                     'Nursery 1',
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '20 min',
-                                        style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: Color.fromRGBO(128, 0, 0, 1.0),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 5),
+                                          child: Icon(
+                                            Icons.timer,
+                                            size: 10.0,
+                                            color:
+                                                Color.fromRGBO(128, 0, 0, 1.0),
+                                          ),
                                         ),
-                                      ),
-                                      Icon(
-                                        Icons.star,
+                                        Text(
+                                          '20 min',
+                                          style: TextStyle(
+                                            fontSize: 10.0,
+                                            color:
+                                                Color.fromRGBO(128, 0, 0, 1.0),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
                                         color: Colors.green,
-                                        size: 20.0,
+                                        borderRadius: BorderRadius.circular(0),
                                       ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '3 km',
-                                        style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: Color.fromRGBO(128, 0, 0, 1.0),
+                                      margin: const EdgeInsets.only(right: 10),
+                                      child: const Row(
+                                        children: [
+                                          Text(
+                                            '4.5',
+                                            style: TextStyle(
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.white,
+                                            size: 10.0,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 5),
+                                          child: Icon(
+                                            Icons.location_on,
+                                            size: 10.0,
+                                            color:
+                                                Color.fromRGBO(128, 0, 0, 1.0),
+                                          ),
                                         ),
-                                      ),
-                                      Text(
+                                        Text(
+                                          '3 km',
+                                          style: TextStyle(
+                                            fontSize: 10.0,
+                                            color:
+                                                Color.fromRGBO(128, 0, 0, 1.0),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 10),
+                                      child: Text(
                                         '₹450 (min.)',
                                         style: TextStyle(
-                                          fontSize: 14.0,
+                                          fontSize: 10.0,
                                           color: Color.fromRGBO(128, 0, 0, 1.0),
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
+                        //  ),
                       );
                     },
                   ),
@@ -263,7 +366,7 @@ class _MyHomePageState extends State<MyHomePage>
                           child: Row(children: [
                             Container(
                               height: 120,
-                              width: 220,
+                              width: 200,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white,
@@ -280,25 +383,29 @@ class _MyHomePageState extends State<MyHomePage>
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
                                 ),
-                                child: const Padding(
-                                  padding: EdgeInsets.only(left: 8, top: 10),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 8, top: 10),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Nursery 1',
                                         style: TextStyle(
                                           fontSize: 18.0,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(height: 4),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
+                                          const Icon(
+                                            Icons.timer,
+                                            size: 10.0,
+                                            color:
+                                                Color.fromRGBO(128, 0, 0, 1.0),
+                                          ),
+                                          const Text(
                                             '20 min',
                                             style: TextStyle(
                                               fontSize: 10.0,
@@ -307,22 +414,54 @@ class _MyHomePageState extends State<MyHomePage>
                                                   128, 0, 0, 1.0),
                                             ),
                                           ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(0),
+                                            ),
+                                            margin: const EdgeInsets.only(
+                                                left: 10, right: 5),
+                                            child: const Row(
+                                              children: [
+                                                Text(
+                                                  '4.5',
+                                                  style: TextStyle(
+                                                    fontSize: 10.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                Icon(
+                                                  Icons.star,
+                                                  color: Colors.white,
+                                                  size: 10.0,
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const Row(
+                                        children: [
                                           Icon(
-                                            Icons.star,
-                                            color: Colors.green,
-                                            size: 20.0,
+                                            Icons.location_on,
+                                            size: 10.0,
+                                            color:
+                                                Color.fromRGBO(128, 0, 0, 1.0),
+                                          ),
+                                          Text(
+                                            '3 km',
+                                            style: TextStyle(
+                                              fontSize: 10.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color.fromRGBO(
+                                                  128, 0, 0, 1.0),
+                                            ),
                                           ),
                                         ],
                                       ),
-                                      Text(
-                                        '3 km',
-                                        style: TextStyle(
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color.fromRGBO(128, 0, 0, 1.0),
-                                        ),
-                                      ),
-                                      Text(
+                                      const Text(
                                         '₹450 (min)',
                                         style: TextStyle(
                                           fontSize: 10.0,
@@ -330,8 +469,8 @@ class _MyHomePageState extends State<MyHomePage>
                                           color: Color.fromRGBO(128, 0, 0, 1.0),
                                         ),
                                       ),
-                                      SizedBox(height: 4),
-                                      Text(
+                                      const SizedBox(height: 4),
+                                      const Text(
                                         'Flower, Ceramic, Vege..',
                                         style: TextStyle(
                                           fontSize: 10.0,
@@ -360,19 +499,19 @@ class _MyHomePageState extends State<MyHomePage>
 class BottomNavItem extends StatelessWidget {
   final String svgScr;
   final bool isActive;
-  final void Function()? press;
+  final void Function()? onTap;
 
   const BottomNavItem({
     super.key,
     required this.svgScr,
     this.isActive = false,
-    this.press,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: press,
+      onTap: onTap, // Call the onTap function here
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -385,44 +524,51 @@ class BottomNavItem extends StatelessWidget {
 
 GridView gridView(BuildContext context) {
   return GridView.count(
-    padding: const EdgeInsets.all(13),
+    padding: const EdgeInsets.all(10),
     shrinkWrap: true,
     crossAxisCount: 4,
-    crossAxisSpacing: 5,
-    mainAxisSpacing: 5,
+    crossAxisSpacing: 2,
+    mainAxisSpacing: 20,
     children: [
-      GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FlowerPage(),
-            ),
-          );
-        },
-        child: ClipOval(
-          child: Neumorphic(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/flowers.svg',
-                  width: 30,
-                  height: 30,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: const Text(
-                    'Flower',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
+      SingleChildScrollView(
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FlowerPage(),
+              ),
+            );
+          },
+          child: Column(
+            children: [
+              ClipOval(
+                child: Neumorphic(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/flowers.jpg',
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.fill,
+                      ),
+                    ],
                   ),
-                )
-              ],
-            ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 5),
+                child: const Text(
+                  'Flower',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -435,30 +581,35 @@ GridView gridView(BuildContext context) {
             ),
           );
         },
-        child: ClipOval(
-          child: Neumorphic(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/bell-pepper-svgrepo-com.svg',
-                  width: 30,
-                  height: 30,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: const Text(
-                    'Fruits',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
+        child: Column(
+          children: [
+            ClipOval(
+              child: Neumorphic(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/fruits.jpg',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.fill,
                     ),
-                  ),
-                )
-              ],
+                  ],
+                ),
+              ),
             ),
-          ),
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              child: const Text(
+                'Fruits',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          ],
         ),
       ),
       GestureDetector(
@@ -470,30 +621,35 @@ GridView gridView(BuildContext context) {
             ),
           );
         },
-        child: ClipOval(
-          child: Neumorphic(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/cherry-svgrepo-com(1).svg',
-                  width: 30,
-                  height: 30,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: const Text(
-                    'Vegetables',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
+        child: Column(
+          children: [
+            ClipOval(
+              child: Neumorphic(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/vege.jpg',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.fill,
                     ),
-                  ),
-                )
-              ],
+                  ],
+                ),
+              ),
             ),
-          ),
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              child: const Text(
+                'Vegetables',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          ],
         ),
       ),
       GestureDetector(
@@ -505,30 +661,35 @@ GridView gridView(BuildContext context) {
             ),
           );
         },
-        child: ClipOval(
-          child: Neumorphic(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/corn-svgrepo-com.svg',
-                  width: 30,
-                  height: 30,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: const Text(
-                    'Ceramic',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
+        child: Column(
+          children: [
+            ClipOval(
+              child: Neumorphic(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/spices.jpg',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.fill,
                     ),
-                  ),
-                )
-              ],
+                  ],
+                ),
+              ),
             ),
-          ),
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              child: const Text(
+                'Ceramic',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          ],
         ),
       ),
       GestureDetector(
@@ -540,30 +701,35 @@ GridView gridView(BuildContext context) {
             ),
           );
         },
-        child: ClipOval(
-          child: Neumorphic(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/grapes-grape-svgrepo-com.svg',
-                  width: 30,
-                  height: 30,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: const Text(
-                    'Hanging',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
+        child: Column(
+          children: [
+            ClipOval(
+              child: Neumorphic(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/hanging.jpg',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.fill,
                     ),
-                  ),
-                )
-              ],
+                  ],
+                ),
+              ),
             ),
-          ),
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              child: const Text(
+                'Hanging',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          ],
         ),
       ),
       GestureDetector(
@@ -575,30 +741,35 @@ GridView gridView(BuildContext context) {
             ),
           );
         },
-        child: ClipOval(
-          child: Neumorphic(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/peach-svgrepo-com.svg',
-                  width: 30,
-                  height: 30,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: const Text(
-                    'Spices',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
+        child: Column(
+          children: [
+            ClipOval(
+              child: Neumorphic(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/spices.jpg',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.fill,
                     ),
-                  ),
-                )
-              ],
+                  ],
+                ),
+              ),
             ),
-          ),
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              child: const Text(
+                'Spices',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          ],
         ),
       ),
       GestureDetector(
@@ -610,30 +781,35 @@ GridView gridView(BuildContext context) {
             ),
           );
         },
-        child: ClipOval(
-          child: Neumorphic(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/sheaf-of-rice-svgrepo-com(1).svg',
-                  width: 30,
-                  height: 30,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: const Text(
-                    'Relgious',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
+        child: Column(
+          children: [
+            ClipOval(
+              child: Neumorphic(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/sheaf-of-rice-svgrepo-com(1).svg',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.fill,
                     ),
-                  ),
-                )
-              ],
+                  ],
+                ),
+              ),
             ),
-          ),
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              child: const Text(
+                'Relgious',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          ],
         ),
       ),
       GestureDetector(
@@ -645,30 +821,35 @@ GridView gridView(BuildContext context) {
             ),
           );
         },
-        child: ClipOval(
-          child: Neumorphic(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/tomato-svgrepo-com.svg',
-                  width: 30,
-                  height: 30,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: const Text(
-                    'Green Plant',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
+        child: Column(
+          children: [
+            ClipOval(
+              child: Neumorphic(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/nursery-1.jpg',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.fill,
                     ),
-                  ),
-                )
-              ],
+                  ],
+                ),
+              ),
             ),
-          ),
+            Container(
+              margin: const EdgeInsets.only(top: 5),
+              child: const Text(
+                'Green Plant',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          ],
         ),
       ),
     ],
@@ -718,7 +899,7 @@ AppBar appBar(BuildContext context) {
       child: Container(
         margin: const EdgeInsets.only(left: 5),
         child: IconButton(
-          iconSize: 55,
+          iconSize: 40,
           icon: const Icon(Icons.location_on),
           onPressed: () {
             Navigator.pushNamed(context, LocationScreen.routeName);
@@ -736,13 +917,13 @@ AppBar appBar(BuildContext context) {
             Text(
               'Home',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Colors.green,
               ),
             ),
             Text(
-              'Bangalore',
+              'Pau Sector 35, Chandigarh',
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -757,9 +938,11 @@ AppBar appBar(BuildContext context) {
         child: Container(
           margin: const EdgeInsets.only(right: 5),
           child: IconButton(
-            iconSize: 55,
-            icon: const Icon(Icons.account_circle),
-            onPressed: () {},
+            iconSize: 40,
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.pushNamed(context, ProfileScreen.routeName);
+            },
           ),
         ),
       ),
@@ -768,58 +951,128 @@ AppBar appBar(BuildContext context) {
 }
 
 class CategorySelector extends StatelessWidget {
-  const CategorySelector({
-    Key? key,
-    required this.selected,
-    required this.categories,
-    required this.onTap,
-  }) : super(key: key);
-
   final int selected;
   final List<String> categories;
   final Function(int) onTap;
+  final Function(String) onSortSelected;
+
+  CategorySelector({
+    required this.selected,
+    required this.categories,
+    required this.onTap,
+    required this.onSortSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 34.0,
       child: ListView(
-        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+        scrollDirection: Axis.horizontal,
         children: [
           for (int i = 0; i < categories.length; i++)
-            GestureDetector(
-              onTap: () {
-                onTap(i);
-              },
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                margin: const EdgeInsets.only(right: 6.0, left: 6.0),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade300,
-                      blurRadius: 40,
-                      spreadRadius: 3,
-                    )
-                  ],
-                  color: selected == i ? Colors.green : Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Center(
-                  child: Text(
-                    categories[i],
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15.0,
-                      color: selected == i ? Colors.white : Colors.black,
+            i == 0
+                ? Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          if (i == selected) {
+                            // Show the dropdown when the "Sort" category is tapped.
+                            showSortMenu(context);
+                          } else {
+                            onTap(i);
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 8.0),
+                          margin: const EdgeInsets.only(right: 6.0, left: 6.0),
+                          decoration: BoxDecoration(
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.white,
+                                blurRadius: 30,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                            color: selected == i ? Colors.green : Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                categories[i],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15.0,
+                                  color: selected == i
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                              const Icon(Icons.arrow_drop_down),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      onTap(i);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      margin: const EdgeInsets.only(right: 6.0, left: 6.0),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            blurRadius: 40,
+                            spreadRadius: 3,
+                          ),
+                        ],
+                        color: selected == i ? Colors.green : Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          categories[i],
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15.0,
+                            color: selected == i ? Colors.white : Colors.black,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
         ],
       ),
     );
+  }
+
+  void showSortMenu(BuildContext context) {
+    // Show a dropdown menu when the "Sort" category is tapped.
+    showMenu(
+      context: context,
+      position: RelativeRect.fill,
+      items: <PopupMenuEntry<String>>[
+        PopupMenuItem<String>(
+          value: "distance",
+          child: Text("Sort by Distance"),
+        ),
+        PopupMenuItem<String>(
+          value: "price",
+          child: Text("Sort by Price"),
+        ),
+      ],
+      elevation: 8.0,
+    ).then((value) {
+      if (value != null) {
+        onSortSelected(value);
+      }
+    });
   }
 }
