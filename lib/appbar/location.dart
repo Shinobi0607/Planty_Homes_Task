@@ -30,9 +30,8 @@ class _LocationScreenState extends State<LocationScreen> {
             myLocationEnabled: true,
             buildingsEnabled: false,
             initialCameraPosition: const CameraPosition(
-              target: LatLng(0,
-                  0), 
-              zoom: 1, 
+              target: LatLng(0, 0),
+              zoom: 1,
             ),
             onMapCreated: (controller) {
               _mapController = controller;
@@ -48,7 +47,7 @@ class _LocationScreenState extends State<LocationScreen> {
               child: Row(
                 children: [
                   SvgPicture.asset(
-                    'assets/calendar.svg',
+                    'assets/menu.svg',
                     height: 30,
                   ),
                   const SizedBox(width: 10),
@@ -63,20 +62,19 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   void _startMapAnimation() {
-  
-    final worldView =  CameraPosition(
-      target: LatLng(0, 0), 
-      zoom: 1, 
+    final worldView = CameraPosition(
+      target: LatLng(0, 0),
+      zoom: 1,
     );
 
     final indiaView = CameraPosition(
-      target: LatLng(20, 78), 
-      zoom: 5, 
+      target: LatLng(20, 78),
+      zoom: 5,
     );
 
     final chandigarhView = CameraPosition(
-      target: chandigarhCoordinates, 
-      zoom: 15, 
+      target: chandigarhCoordinates,
+      zoom: 15,
     );
 
     Future.delayed(Duration(seconds: 1), () {

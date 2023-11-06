@@ -16,14 +16,13 @@ import 'package:plantyhomes/appbar/location.dart';
 import 'package:plantyhomes/appbar/profile.dart';
 import 'package:plantyhomes/model/categories_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:plantyhomes/splash.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,9 +32,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      initialRoute: '/',
+      initialRoute: '/', 
       routes: {
-        '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
+        '/': (context) => SplashScreen(), 
         LocationScreen.routeName: (context) => LocationScreen(),
         ProfileScreen.routeName: (context) => ProfileScreen(),
         '/flower': (context) => FlowerPage(),
@@ -224,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage>
                               height: 80,
                               child: Image.asset(
                                 'assets/nurse.jpg',
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             Column(
@@ -340,26 +339,42 @@ class _MyHomePageState extends State<MyHomePage>
                   ),
                 ),
                 const SizedBox(height: 10),
-                Container(
-                  margin: const EdgeInsets.only(left: 20),
-                  alignment: Alignment.centerLeft,
-                  child: const Text(
-                    'Nurseries around you',
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(left: 20),
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        'Nurseries around you',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 20),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, LocationScreen.routeName);
+                      },
+                      child: Icon(
+                        Icons.location_searching,
+                        size: 20,
+                        color: Colors.green,
+                      ),
+                    )
+                  ],
                 ),
                 const SizedBox(height: 10),
                 Container(
                   height: 400,
                   child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      if (index < 3) {
                         return Container(
                           margin: const EdgeInsets.only(
                               left: 20, right: 20, bottom: 10),
@@ -482,11 +497,15 @@ class _MyHomePageState extends State<MyHomePage>
                                   ),
                                 ),
                               ),
-                            )
+                            ),
                           ]),
                         );
-                      }),
-                )
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
+                ),
               ],
             ),
           ],
@@ -977,7 +996,6 @@ class CategorySelector extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           if (i == selected) {
-                            // Show the dropdown when the "Sort" category is tapped.
                             showSortMenu(context);
                           } else {
                             onTap(i);
@@ -1054,16 +1072,15 @@ class CategorySelector extends StatelessWidget {
   }
 
   void showSortMenu(BuildContext context) {
-    // Show a dropdown menu when the "Sort" category is tapped.
     showMenu(
       context: context,
       position: RelativeRect.fill,
       items: <PopupMenuEntry<String>>[
-        PopupMenuItem<String>(
+        const PopupMenuItem<String>(
           value: "distance",
           child: Text("Sort by Distance"),
         ),
-        PopupMenuItem<String>(
+        const PopupMenuItem<String>(
           value: "price",
           child: Text("Sort by Price"),
         ),
