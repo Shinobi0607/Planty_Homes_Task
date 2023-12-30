@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 1), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => MyHomePage(title: 'Flutter Demo Home Page'),
-      ));
+      )); 
     });
   }
 
